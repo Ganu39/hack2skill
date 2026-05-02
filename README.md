@@ -1,6 +1,6 @@
 # 🗳️ ElectraGuide — AI-Powered Voter Education Platform
 
-🔗 **Live Demo:** [https://phenomenal-choux-e72d4e.netlify.app](https://phenomenal-choux-e72d4e.netlify.app)
+🔗 **Live Demo:** [https://electraguideai.netlify.app](https://electraguideai.netlify.app)
 
 ElectraGuide is an intelligent, interactive platform that educates citizens about the Indian electoral process. It provides step-by-step voting guidance, an AI-powered chat assistant, realistic polling-booth simulations, quizzes, and a comprehensive election timeline — all in a visually engaging interface.
 
