@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, ArrowRight, ShieldCheck, XCircle } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { simulationData, summaryData } from '../data/simulationScenarios';
+import { AnalyticsEvents } from '../utils/firebase';
 
 export default function PollingSimulation() {
   const { language } = useAppContext();
@@ -30,8 +31,10 @@ export default function PollingSimulation() {
     setEvmState('idle');
     if (currentStage < simulationData.length - 1) {
       setCurrentStage((prev) => prev + 1);
+      AnalyticsEvents.simulationStepCompleted(currentStage + 1);
     } else {
       setIsCompleted(true);
+      AnalyticsEvents.simulationCompleted();
     }
   };
 
@@ -58,6 +61,7 @@ export default function PollingSimulation() {
     if (evmState !== 'idle') return;
     setEvmState('interacting');
     playBeep();
+    AnalyticsEvents.simulationStepCompleted('evm_button_pressed');
     setTimeout(() => setEvmState('done'), 1500);
   };
 

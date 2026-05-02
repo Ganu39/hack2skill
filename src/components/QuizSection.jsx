@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import { Award, CheckCircle2, XCircle, ArrowRight, RefreshCcw } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { quizBank } from '../utils/quizBank';
+import { AnalyticsEvents } from '../utils/firebase';
 
 // Utility to shuffle an array
 const shuffleArray = (array) => {
@@ -90,6 +91,7 @@ export default function QuizSection() {
     setSelectedAnswer(idx);
     const isCorrect = questions[currentQ].options[idx].isCorrect;
     setIsAnswerCorrect(isCorrect);
+    AnalyticsEvents.quizAnswered(isCorrect);
 
     if (isCorrect) {
       setScore(prev => prev + 1);
@@ -108,6 +110,7 @@ export default function QuizSection() {
 
   const finishQuiz = () => {
     setIsFinished(true);
+    AnalyticsEvents.quizCompleted(score, questions.length, 'election-knowledge');
     if (score >= 7) {
       triggerConfetti();
     }
@@ -205,7 +208,7 @@ export default function QuizSection() {
                 </span>
               </div>
               
-              <div className="space-y-3 mt-2 pr-2 pb-2">
+              <div className="space-y-3 mt-2 pr-2 pb-2" role="radiogroup" aria-label="Answer options">
                 {questions[currentQ].options.map((opt, idx) => {
                   let btnStateClass = "bg-white border-slate-200 hover:border-brand-blue/50 hover:bg-brand-lightBlue/30 text-slate-700 shadow-sm";
                   let Icon = null;

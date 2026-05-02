@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, User, Sparkles, FileText, ArrowRight } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { generateChatResponse } from '../utils/ai';
+import { AnalyticsEvents } from '../utils/firebase';
 
 export default function ChatAssistant() {
   const { t, speak, language } = useAppContext();
@@ -42,9 +43,12 @@ export default function ChatAssistant() {
     setMessages(prev => [...prev, userMessage]);
     setInputText('');
     setIsTyping(true);
+    AnalyticsEvents.chatMessageSent(language);
 
     // Call Gemini AI
+    const startTime = Date.now();
     const responseText = await generateChatResponse(text, currentHistory);
+    AnalyticsEvents.chatResponseReceived(Date.now() - startTime);
     
     setIsTyping(false);
     let botResponse = { id: Date.now() + 1, type: 'bot', text: responseText };
@@ -68,7 +72,12 @@ export default function ChatAssistant() {
   return (
     <div className="flex flex-col h-full bg-white relative pb-16 md:pb-0 pt-4">
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar">
+      <div 
+        role="log" 
+        aria-label="Chat conversation" 
+        aria-live="polite" 
+        className="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar"
+      >
         <AnimatePresence initial={false}>
           {messages.map((msg) => (
             <motion.div 
@@ -145,6 +154,8 @@ export default function ChatAssistant() {
             initial={{ opacity: 0, y: 10 }} 
             animate={{ opacity: 1, y: 0 }}
             className="flex items-end gap-2"
+            aria-busy="true"
+            role="status"
           >
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-saffron to-brand-blue text-white flex items-center justify-center shadow-sm">
               <Sparkles size={16} />
@@ -173,12 +184,15 @@ export default function ChatAssistant() {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder={t('chat.placeholder')}
+            aria-label="Type your election-related question"
+            autoComplete="off"
             className="w-full bg-slate-50 border border-slate-200 rounded-full py-3.5 pl-5 pr-14 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all"
           />
           <button 
             type="submit"
             disabled={!inputText.trim()}
-            className="absolute right-1.5 p-2.5 bg-brand-blue text-white rounded-full hover:bg-brand-blue/90 hover:shadow-lg hover:shadow-brand-blue/20 disabled:opacity-50 disabled:hover:shadow-none transition-all"
+            aria-label="Send message"
+            className="absolute right-1.5 p-2.5 bg-brand-blue text-white rounded-full hover:bg-brand-blue/90 hover:shadow-lg hover:shadow-brand-blue/20 disabled:opacity-50 disabled:hover:shadow-none transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
           >
             <Send size={16} className={inputText.trim() ? "translate-x-[-1px] translate-y-[-1px]" : ""} />
           </button>
