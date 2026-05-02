@@ -1,16 +1,90 @@
-# React + Vite
+# 🗳️ ElectraGuide — AI-Powered Voter Education Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ElectraGuide is an intelligent, interactive platform that educates citizens about the Indian electoral process. It provides step-by-step voting guidance, an AI-powered chat assistant, realistic polling-booth simulations, quizzes, and a comprehensive election timeline — all in a visually engaging interface.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **🤖 AI Chat Assistant** — Ask election-related questions and get instant, fact-based answers powered by Google Gemini AI
+- **🗳️ Polling Booth Simulation** — Experience a realistic, step-by-step walkthrough of the EVM voting process with sound effects
+- **📋 Interactive Guidance** — Visual step-by-step voter registration and eligibility checker
+- **📅 Election Timeline** — Interactive timeline covering the full Indian election process from announcement to results
+- **🧠 Quiz Section** — Test your knowledge with multiple-choice election trivia
+- **❓ FAQ Module** — Searchable, categorized answers to common voter questions
+- **🌐 Multilingual Support** — Full English & Hindi language toggle
+- **🔊 Text-to-Speech** — Listen to content for accessibility
+- **🎨 Premium UI** — Glassmorphic design with smooth animations and a patriotic colour scheme
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 19, Vite |
+| Styling | Tailwind CSS, custom glassmorphism |
+| AI | Google Gemini API (`@google/generative-ai`) |
+| Animations | Framer Motion, CSS transitions |
+| Icons | Lucide React |
+| Effects | Canvas Confetti |
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+- Node.js (v18 or higher)
+- A Google Gemini API key
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/Ganu39/hack2skill.git
+cd hack2skill
+
+# Install dependencies
+npm install
+
+# Create a .env file with your Gemini API key
+echo VITE_GEMINI_API_KEY=your_api_key_here > .env
+
+# Start the development server
+npm run dev
+```
+
+The app will be available at `http://localhost:5173`
+
+## 📁 Project Structure
+
+```
+hack2skill/
+├── public/              # Static assets (favicon, icons, images)
+├── src/
+│   ├── assets/          # Image assets
+│   ├── components/      # React components
+│   │   ├── ChatAssistant.jsx
+│   │   ├── ElectionTimeline.jsx
+│   │   ├── FAQSection.jsx
+│   │   ├── InteractiveGuidance.jsx
+│   │   ├── Onboarding.jsx
+│   │   ├── PollingSimulation.jsx
+│   │   ├── QuizSection.jsx
+│   │   └── TopNav.jsx
+│   ├── context/         # Global state (AppContext)
+│   ├── data/            # Simulation scenarios
+│   ├── utils/           # AI helper, quiz bank, translations
+│   ├── App.jsx          # Main application
+│   └── main.jsx         # Entry point
+├── index.html
+├── package.json
+├── tailwind.config.js
+└── vite.config.js
+```
+
+## 📸 Screenshots
+
+> Run the app locally with `npm run dev` to see the full experience!
+
+## 📜 License
+
+This project was built for the Hack2Skill hackathon.
+
+---
+
+Built with ❤️ by [Ganu39](https://github.com/Ganu39)
