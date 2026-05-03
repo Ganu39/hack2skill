@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Award, CheckCircle2, XCircle, ArrowRight, RefreshCcw } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { quizBank } from '../utils/quizBank';
-import { AnalyticsEvents } from '../utils/firebase';
+import { AnalyticsEvents, saveQuizScore } from '../utils/firebase';
 
 // Utility to shuffle an array
 const shuffleArray = (array) => {
@@ -18,6 +19,7 @@ const shuffleArray = (array) => {
 
 export default function QuizSection() {
   const { t, language } = useAppContext();
+  const { user, isLoggedIn, updateProgress, progress } = useAuth();
   
   const [questions, setQuestions] = useState([]);
   const [currentQ, setCurrentQ] = useState(0);
@@ -108,9 +110,24 @@ export default function QuizSection() {
     }
   };
 
-  const finishQuiz = () => {
+  const finishQuiz = async () => {
     setIsFinished(true);
     AnalyticsEvents.quizCompleted(score, questions.length, 'election-knowledge');
+    
+    // Save score to Firestore if logged in
+    if (isLoggedIn && user) {
+      const percentage = Math.round((score / questions.length) * 100);
+      await saveQuizScore(user.uid, {
+        score,
+        total: questions.length,
+        category: 'election-knowledge',
+      });
+      await updateProgress({
+        quizzesTaken: (progress.quizzesTaken || 0) + 1,
+        bestScore: Math.max(progress.bestScore || 0, percentage),
+      });
+    }
+    
     if (score >= 7) {
       triggerConfetti();
     }
